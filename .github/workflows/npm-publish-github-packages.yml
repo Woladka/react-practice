@@ -6,6 +6,12 @@ name: Node.js Package
 on:
   release:
     types: [created]
+  push:
+    paths:
+      - '02project/**'  # Tracks changes in the 02project folder and its subfolders
+  pull_request:
+    paths:
+      - '02project/**'  # Tracks changes in the 02project folder and its subfolders
 
 jobs:
   build:
