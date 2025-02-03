@@ -2,6 +2,8 @@
   "name": "02project",
   "version": "0.0.0",
   "type": "module",
+  "homepage": "https://Woladka.github.io/02project",
+
   "scripts": {
     "dev": "vite",
     "build": "vite build",
