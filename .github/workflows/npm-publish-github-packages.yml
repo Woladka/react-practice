@@ -1,35 +1,35 @@
-name: Deploy to GitHub Pages
+name: Deploy React App
 
 on:
   push:
     branches:
-      - main  # Change to your main branch name
+      - main  # Change if your default branch is different
 
 permissions:
-  contents: write  # Allow GitHub to write to the repo
+  contents: write
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Install Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: npm
+          cache: 'npm'  # Uses npm for caching dependencies
 
       - name: Install dependencies
-        run: npm install
+        run: npm install --package-lock-only  # Creates a lock file if missing
 
       - name: Build project
-        run: npm run build
+        run: npm run build  # This assumes you have a build script in package.json
 
       - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          branch: gh-pages
-          folder: dist
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist  # Adjust this if your build directory is different
