@@ -34,4 +34,4 @@ jobs:
           node-version: 20
           registry-url: https://npm.pkg.github.com/
       - run: npm ci
-      - run: npm publish --access public  # Publishing to GitHub Packages without using a token
+      - run: npm publish --access public
