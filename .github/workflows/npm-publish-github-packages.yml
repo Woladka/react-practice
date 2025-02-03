@@ -1,37 +1,35 @@
-name: Node.js Package
+name: Deploy to GitHub Pages
 
 on:
-  release:
-    types: [created]
   push:
-    paths:
-      - '02project/**'  # Tracks changes in the 02project folder and its subfolders
-  pull_request:
-    paths:
-      - '02project/**'  # Tracks changes in the 02project folder and its subfolders
+    branches:
+      - main  # Change to your main branch name
+
+permissions:
+  contents: write  # Allow GitHub to write to the repo
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - run: npm ci
-      - run: npm test
 
-  publish-gpr:
-    needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
         with:
-          node-version: 20
-          registry-url: https://npm.pkg.github.com/
-      - run: npm ci
-      - run: npm publish --access public
+          node-version: 18
+          cache: npm
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: dist
