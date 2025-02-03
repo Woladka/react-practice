@@ -3,7 +3,7 @@ name: Deploy React App
 on:
   push:
     branches:
-      - main  # Change if your default branch is different
+      - main
 
 permissions:
   contents: write
@@ -20,16 +20,19 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: 'npm'  # Uses npm for caching dependencies
+          cache: 'npm'
+          cache-dependency-path: 02project/package-lock.json  # Tell GitHub Actions where the lock file is
 
       - name: Install dependencies
-        run: npm install --package-lock-only  # Creates a lock file if missing
+        run: npm ci
+        working-directory: 02project  # Change working directory to 02project
 
       - name: Build project
-        run: npm run build  # This assumes you have a build script in package.json
+        run: npm run build
+        working-directory: 02project  # Change working directory to 02project
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist  # Adjust this if your build directory is different
+          publish_dir: ./02project/dist  # Change the directory to the correct build output
